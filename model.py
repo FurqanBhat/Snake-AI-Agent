@@ -42,7 +42,7 @@ class QTrainer:
         next_state=torch.tensor(next_state, dtype=torch.float)
      
         if len(state.shape)==1:
-            #means only 1 dim but we want it in dim (1,x), 1=no. of batches
+            #means only 1 dim but we want it in dim (1,x), 1=no. of batches. i.e to simulate batch of size 1
             state=torch.unsqueeze(state,0)
             action=torch.unsqueeze(action,0)
             reward=torch.unsqueeze(reward,0)
@@ -50,14 +50,14 @@ class QTrainer:
             done=(done,)
 
         #1:predicted q values withcurrent state
-        pred=self.model(state)
+        pred=self.model(state) #shape=[batch_size,num_actions=3],these are the estimated q_values given by model
         target=pred.clone()
-        for idx in range(len(done)):
+        for idx in range(len(done)): #len(done)=len(state)=len(action)......=batch_size
             Q_new=reward[idx]
             if not done[idx]:
-                Q_new=reward[idx]+self.gamma*torch.max(self.model(next_state[idx]))
-
-        target[idx][torch.argmax(action).item()]=Q_new
+                Q_new=reward[idx]+self.gamma*torch.max(self.model(next_state[idx])) #bellman equation
+                #self.model(next_state[idx]) gives 3 outputs, i.e 3 Q-values for 3 actions possible in next state
+        target[idx][torch.argmax(action).item()]=Q_new #updates Q_values given by the model
         self.optimizer.zero_grad()
         loss=self.criterion(pred, target)
         loss.backward()

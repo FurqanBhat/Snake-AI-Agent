@@ -91,6 +91,7 @@ class SnakeGameAI:
             reward=10
             self._place_food()
         else:
+            reward=-0.2
             self.snake.pop()
         
         # 5. update ui and clock
