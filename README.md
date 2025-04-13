@@ -6,6 +6,8 @@ This project implements an AI agent that learns to play the classic Snake game u
 
 This project is ideal for anyone looking to understand the practical application of Deep Reinforcement Learning concepts, specifically DQN, in game AI development.
 
+!(snake_ss.png)
+
 ## Features
 
 -   **Game Environment:** Snake game built from scratch using Python and PyGame.
